@@ -22,6 +22,22 @@ public class CartTest extends TestBase {
         driver.findElement(By.className("shopping_cart_badge")).getText(),
         "Item not correctly added to cart");
   }
+  @Test
+  public void addFromProductPage_add_to_cart_sauce_labs_backpack() {
+    driver.get("https://www.saucedemo.com/");
+    driver.findElement(By.cssSelector("input[data-test='username']")).sendKeys("standard_user");
+    driver.findElement(By.cssSelector("input[data-test='password']")).sendKeys("secret_sauce");
+    driver.findElement(By.cssSelector("input[data-test='login-button']")).click();
+
+    driver
+        .findElement(By.cssSelector("button[data-test='add-to-cart-sauce-labs-backpack']"))
+        .click();
+
+    Assertions.assertEquals(
+        "1",
+        driver.findElement(By.className("shopping_cart_badge")).getText(),
+        "Item not correctly added to cart");
+  }
 
   @Test
   public void removeFromProductPage() {
@@ -35,6 +51,24 @@ public class CartTest extends TestBase {
 
     driver
         .findElement(By.cssSelector("button[data-test='remove-sauce-labs-bolt-t-shirt']"))
+        .click();
+
+    Assertions.assertTrue(
+        driver.findElements(By.className("shopping_cart_badge")).isEmpty(),
+        "Item not correctly removed from cart");
+  }
+  @Test
+  public void removeFromProductPage_add_to_cart_sauce_labs_backpack() {
+    driver.get("https://www.saucedemo.com/");
+    driver.findElement(By.cssSelector("input[data-test='username']")).sendKeys("standard_user");
+    driver.findElement(By.cssSelector("input[data-test='password']")).sendKeys("secret_sauce");
+    driver.findElement(By.cssSelector("input[data-test='login-button']")).click();
+    driver
+        .findElement(By.cssSelector("button[data-test='add-to-cart-sauce-labs-backpack']"))
+        .click();
+
+    driver
+        .findElement(By.cssSelector("button[data-test='remove-sauce-labs-backpack']"))
         .click();
 
     Assertions.assertTrue(

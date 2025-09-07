@@ -21,10 +21,35 @@ public class AuthenticationTest extends TestBase {
   }
 
   @Test
+  // 
+  public void signInUnsuccessful1_wrong_username_password() {
+    driver.get("https://www.saucedemo.com/");
+
+    driver.findElement(By.cssSelector("input[data-test='username']")).sendKeys("wrong_user");
+    driver.findElement(By.cssSelector("input[data-test='password']")).sendKeys("wrong_password");
+    driver.findElement(By.cssSelector("input[data-test='login-button']")).click();
+
+    WebElement errorElement = driver.findElement(By.cssSelector("[data-test='error']"));
+    Assertions.assertTrue(
+        errorElement.getText().contains("Username and password do not match any user in this service"), "Error Not Found");
+  }
+
+  @Test
   public void signInSuccessful() {
     driver.get("https://www.saucedemo.com/");
 
     driver.findElement(By.cssSelector("input[data-test='username']")).sendKeys("standard_user");
+    driver.findElement(By.cssSelector("input[data-test='password']")).sendKeys("secret_sauce");
+    driver.findElement(By.cssSelector("input[data-test='login-button']")).click();
+
+    Assertions.assertEquals(
+        "https://www.saucedemo.com/inventory.html", driver.getCurrentUrl(), "Login Not Successful");
+  }
+  @Test
+  public void signInSuccessful_another_account() {
+    driver.get("https://www.saucedemo.com/");
+
+    driver.findElement(By.cssSelector("input[data-test='username']")).sendKeys("problem_user");
     driver.findElement(By.cssSelector("input[data-test='password']")).sendKeys("secret_sauce");
     driver.findElement(By.cssSelector("input[data-test='login-button']")).click();
 
@@ -46,4 +71,19 @@ public class AuthenticationTest extends TestBase {
     Assertions.assertEquals(
         "https://www.saucedemo.com/", driver.getCurrentUrl(), "Logout Not Successful");
   }
+  @Test
+  public void logout_with_visual_user() throws InterruptedException {
+    driver.get("https://www.saucedemo.com/");
+    driver.findElement(By.cssSelector("input[data-test='username']")).sendKeys("standard_user");
+    driver.findElement(By.cssSelector("input[data-test='password']")).sendKeys("secret_sauce");
+    driver.findElement(By.cssSelector("input[data-test='login-button']")).click();
+    driver.findElement(By.id("react-burger-menu-btn")).click();
+    Thread.sleep(1000);
+
+    driver.findElement(By.id("logout_sidebar_link")).click();
+
+    Assertions.assertEquals(
+        "https://www.saucedemo.com/", driver.getCurrentUrl(), "Logout Not Successful");
+  }
+  
 }

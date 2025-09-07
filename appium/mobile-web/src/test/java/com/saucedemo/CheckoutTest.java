@@ -69,4 +69,25 @@ public class CheckoutTest extends TestBase {
 
     Assertions.assertTrue(driver.findElement(By.className("complete-text")).isDisplayed());
   }
+  @Test
+  public void completeCheckout_with_another_info() {
+    driver.get("https://www.saucedemo.com/");
+    driver.findElement(By.cssSelector("input[data-test='username']")).sendKeys("standard_user");
+    driver.findElement(By.cssSelector("input[data-test='password']")).sendKeys("secret_sauce");
+    driver.findElement(By.cssSelector("input[data-test='login-button']")).click();
+    driver.findElement(By.cssSelector("button[data-test='add-to-cart-sauce-labs-onesie']")).click();
+    driver.findElement(By.className("shopping_cart_link")).click();
+    driver.findElement(By.cssSelector("button[data-test='checkout']")).click();
+    driver.findElement(By.cssSelector("input[data-test='firstName']")).sendKeys("anh dai");
+    driver.findElement(By.cssSelector("input[data-test='lastName']")).sendKeys("tran");
+    driver.findElement(By.cssSelector("input[data-test='postalCode']")).sendKeys("0106");
+    driver.findElement(By.cssSelector("input[data-test='continue']")).click();
+
+    driver.findElement(By.cssSelector("button[data-test='finish']")).click();
+
+    Assertions.assertEquals(
+        "https://www.saucedemo.com/checkout-complete.html", driver.getCurrentUrl());
+
+    Assertions.assertTrue(driver.findElement(By.className("complete-text")).isDisplayed());
+  }
 }
